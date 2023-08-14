@@ -27,7 +27,7 @@ sub _get_required {
     }
 
     # get $version, $url, $name from $res
-    my ($version) = sort { $b cmp $a } map { $_->{tag_name} } grep { $_->{tag_name} =~ m/v2\./ } @{ Cpanel::JSON::Load( $res->{content} ) };
+    my ($version) = sort { $b cmp $a } map { $_->{tag_name} } grep { $_->{tag_name} =~ m/v2\./ } @{ ea4_tool::util::json2ref( $res->{content} ) };
     die "Could not determine version from github\n" if !$version;
 
     my $name = "$version.tar.gz";
