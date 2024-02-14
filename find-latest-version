@@ -27,7 +27,20 @@ sub _get_required {
     }
 
     # get $version, $url, $name from $res
-    my ($version) = sort { $b cmp $a } map { $_->{tag_name} } grep { $_->{tag_name} =~ m/v2\./ } @{ ea4_tool::util::json2ref( $res->{content} ) };
+    my @data = map { $_->{tag_name} } grep { $_->{tag_name} =~ m/v2\.9/ } @{ ea4_tool::util::json2ref( $res->{content} ) };
+    my @sorted_data = sort {
+        my ($a_major, $a_minor, $a_nano) = split (/\./, $a);
+        my ($b_major, $b_minor, $b_nano) = split (/\./, $b);
+
+        ($a_nano) = split (/-/, $a_nano);
+        ($b_nano) = split (/-/, $b_nano);
+
+        return -1 if ($b_nano < $a_nano);
+        return 1 if ($b_nano > $a_nano);
+        return 0;
+    } @data;
+
+    my ($version) = @sorted_data;
     die "Could not determine version from github\n" if !$version;
 
     my $name = "$version.tar.gz";
