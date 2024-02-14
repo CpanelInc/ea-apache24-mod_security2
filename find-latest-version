@@ -26,21 +26,7 @@ sub _get_required {
         die "Could not GET ModSecurity info from github ($res->{status} $res->{reason})\n\t Throttled? `curl -I https://api.github.com/rate_limit 2>&1 | grep ^X-RateLimit`\n";
     }
 
-    # get $version, $url, $name from $res
-    my @data = map { $_->{tag_name} } grep { $_->{tag_name} =~ m/v2\.9/ } @{ ea4_tool::util::json2ref( $res->{content} ) };
-    my @sorted_data = sort {
-        my ($a_major, $a_minor, $a_nano) = split (/\./, $a);
-        my ($b_major, $b_minor, $b_nano) = split (/\./, $b);
-
-        ($a_nano) = split (/-/, $a_nano);
-        ($b_nano) = split (/-/, $b_nano);
-
-        return -1 if ($b_nano < $a_nano);
-        return 1 if ($b_nano > $a_nano);
-        return 0;
-    } @data;
-
-    my ($version) = @sorted_data;
+    my ($version) = sort { ea4_tool::util::numerical_only_version_compare ($a, $b); } map { $_->{tag_name} } grep { $_->{tag_name} =~ m/v2\.9/ } @{ ea4_tool::util::json2ref( $res->{content} ) };
     die "Could not determine version from github\n" if !$version;
 
     my $name = "$version.tar.gz";
