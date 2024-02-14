@@ -21,7 +21,7 @@ ea4_tool::util::find_latest_version( \&_get_required, \&_add_sum ) if !caller();
 sub _get_required {
     my ($http) = @_;
 
-    my $res = $http->get("https://api.github.com/repos/SpiderLabs/ModSecurity/releases");
+    my $res = $http->get("https://api.github.com/repos/owasp-modsecurity/ModSecurity/releases");
     if ( !$res->{success} ) {
         die "Could not GET ModSecurity info from github ($res->{status} $res->{reason})\n\t Throttled? `curl -I https://api.github.com/rate_limit 2>&1 | grep ^X-RateLimit`\n";
     }
@@ -31,7 +31,7 @@ sub _get_required {
     die "Could not determine version from github\n" if !$version;
 
     my $name = "$version.tar.gz";
-    my $url  = "https://github.com/SpiderLabs/ModSecurity/archive/$name";
+    my $url  = "https://github.com/owasp-modsecurity/ModSecurity/archive/$name";
     $version =~ s/^v//;
 
     return ( $version, $url, $name );
