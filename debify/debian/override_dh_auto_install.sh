@@ -4,6 +4,8 @@ source debian/vars.sh
 
 set -x
 
+cp mlogc/INSTALL .
+
 # install module
 install -d $DEB_INSTALL_ROOT$_httpd_moddir
 install apache2/.libs/$module_name.so $DEB_INSTALL_ROOT$_httpd_moddir/$module_name.so

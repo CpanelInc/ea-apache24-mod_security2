@@ -32,7 +32,7 @@ Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
 Version: 2.9.7
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
-%define release_prefix 1
+%define release_prefix 2
 Release: %{release_prefix}%{?dist}.cpanel
 License: ASL 2.0
 URL: http://www.modsecurity.org/
@@ -227,6 +227,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Tue Mar 12 2024 Julian Brown <julian.brown@cpanel.net> - 2.9.7-2
+- ZC-11691: Correct build problems on Ubuntu
+
 * Thu Jan 05 2023 Cory McIntire <cory@cpanel.net> - 2.9.7-1
 - EA-11134: Update mod_security2 from v2.9.6 to v2.9.7
 - Security impacting issues
