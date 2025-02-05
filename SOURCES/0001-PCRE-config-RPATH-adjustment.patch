@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 7ddd0ea8358c1a37e8a6e09d1e9c94e8cae328ec Mon Sep 17 00:00:00 2001
 From: Cory McIntire <cory@cpanel.net>
 Date: Tue, 12 Dec 2017 10:04:39 -0600
 Subject: [PATCH 1/4] PCRE config RPATH adjustment
@@ -7,34 +7,33 @@ Case EA-6376: mod_security2.so has faulty RPATH
 Updated find_pcre.m4 to handle libpcre.so installed in system
 library search paths.
 ---
- apache2/Makefile.am | 2 +-
- build/find_pcre.m4  | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ build/find_pcre.m4 | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/apache2/Makefile.am b/apache2/Makefile.am
-index 9af9633..38396bf 100644
---- a/apache2/Makefile.am
-+++ b/apache2/Makefile.am
-@@ -125,7 +125,7 @@ mod_security2_la_LDFLAGS = -module -avoid-version \
- endif
- 
- if LINUX
--mod_security2_la_LDFLAGS = -no-undefined -module -avoid-version -R @PCRE_LD_PATH@ \
-+mod_security2_la_LDFLAGS = -no-undefined -module -avoid-version @PCRE_LD_PATH@ \
-     @APR_LDFLAGS@ \
-     @APU_LDFLAGS@ \
-     @APXS_LDFLAGS@ \
 diff --git a/build/find_pcre.m4 b/build/find_pcre.m4
-index 0c42fed..de8ed65 100644
+index bf297f6..dad27d0 100644
 --- a/build/find_pcre.m4
 +++ b/build/find_pcre.m4
-@@ -67,6 +67,9 @@ if test -n "${pcre_path}"; then
-     PCRE_LDADD="`${PCRE_CONFIG} --libs`"
-     if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(pcre LDADD: $PCRE_LDADD); fi
-     PCRE_LD_PATH="/`${PCRE_CONFIG} --libs | cut -d'/' -f2,3,4,5,6 | cut -d ' ' -f1`"
-+      if test "x`${PCRE_CONFIG} --libs | grep /`" != "x"; then
-+         PCRE_LD_PATH="-R /`${PCRE_CONFIG} --libs | cut -d'/' -f2,3,4,5,6 | cut -d ' ' -f1`"
-+      fi
-     if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(pcre PCRE_LD_PATH: $PCRE_LD_PATH); fi
- else
-     AC_MSG_RESULT([no])
+@@ -70,6 +70,9 @@ else
+         PCRE_LDADD="`${PCRE_CONFIG} --libs`"
+         if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(pcre LDADD: $PCRE_LDADD); fi
+         PCRE_LD_PATH="/`${PCRE_CONFIG} --libs | cut -d'/' -f2,3,4,5,6 | cut -d ' ' -f1`"
++	      if test "x`${PCRE_CONFIG} --libs | grep /`" != "x"; then
++    	     PCRE_LD_PATH="-R /`${PCRE_CONFIG} --libs | cut -d'/' -f2,3,4,5,6 | cut -d ' ' -f1`"
++      	  fi
+         if test "$verbose_output" -eq 1; then AC_MSG_NOTICE(pcre PCRE_LD_PATH: $PCRE_LD_PATH); fi
+     else
+         AC_MSG_RESULT([no])
+@@ -87,7 +90,7 @@ else
+         AC_MSG_NOTICE([*** pcre library not found.])
+     else
+         AC_MSG_NOTICE([using pcre v${PCRE_VERSION}])
+-        ifelse([$1], , , $1) 
+-    fi 
++        ifelse([$1], , , $1)
++    fi
+ fi
+ ])
+-- 
+2.48.1
+

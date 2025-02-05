@@ -30,9 +30,9 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
-Version: 2.9.7
+Version: 2.9.8
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
-%define release_prefix 2
+%define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
 License: ASL 2.0
 URL: http://www.modsecurity.org/
@@ -83,8 +83,8 @@ Requires: ea-libcurl >= %{ea_libcurl_ver}
 
 Patch0: 0001-PCRE-config-RPATH-adjustment.patch
 Patch1: 0002-Fix-httpd.conf.in-template-so-that-tests-run-regress.patch
-Patch2: 0003-Import-some-memory-leak-fixes-for-Mod-Security-2.9.x.patch
-Patch3: 0004-Allow-Lua-5.4.patch
+Patch2: 0003-patch-re.c-for-Ubuntu-builds.patch
+Patch3: 0004-Adjust-test-for-Ubuntu-20-builds.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-build-%(%{__id_u} -n)
 
@@ -107,8 +107,8 @@ This package contains the ModSecurity Audit Log Collector.
 %setup -q -n %{upstream_name}-%{version}
 %patch0 -p1 -b .pcrerpath
 %patch1 -p1 -b .runregressiontests
-%patch2 -p1 -b .memoryleak
-%patch3 -p1 -b .lua54
+%patch2 -p1 -b .recpatch
+%patch3 -p1 -b .testfixubuntu20
 
 # install modsec config (cPanel & WHM expects this name.. don't change it)
 %{__sed} -e "s|@HTTPD_LOGDIR@|%{_httpd_logdir}|" \
@@ -227,6 +227,14 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Wed Feb 05 2025 Cory McIntire <cory.mcintire@webpros.com> - 2.9.8-1
+- EA-12853: Update ea-apache24-mod_security2 from v2.9.7 to v2.9.8
+- Remove 2 patches that were added upstream.
+	- 0003-Import-some-memory-leak-fixes-for-Mod-Security-2.9.x.patch
+	- 0004-Allow-Lua-5.4.patch
+- Add new patch for re.c to allow it to build on Ubuntu
+- Add new patch for tests on Ubuntu 20
+
 * Tue Mar 12 2024 Julian Brown <julian.brown@cpanel.net> - 2.9.7-2
 - ZC-11691: Correct build problems on Ubuntu
 
