@@ -28,6 +28,13 @@
 %define ea_libcurl_ver 7.68.0-2
 %endif
 
+%if 0%{?rhel} >= 10
+# In the newer rpm_builds like AL10, it is doing a much more strict set of checks that are incompatible
+# with EA4, so disable the checks.
+
+%global __brp_check_rpaths %{nil}
+%endif
+
 Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
 Version: 2.9.7
@@ -54,7 +61,13 @@ Provides: mod_security
 # WHM only factors in real package names so:
 Conflicts: ea-modsec30 ea-modsec31
 
-BuildRequires: ea-apache24-devel ea-libxml2-devel pcre-devel lua-devel
+%if 0%{?rhel} >= 10
+BuildRequires: pcre2-devel
+%else
+BuildRequires: pcre-devel
+%endif
+
+BuildRequires: ea-apache24-devel ea-libxml2-devel lua-devel
 BuildRequires: ea-apr-devel ea-apr-util-devel
 BuildRequires: lua-devel >= 5.1, ea-libxml2-devel
 %if 0%{?rhel} >= 7
@@ -68,7 +81,11 @@ Requires: ea-modsec-sdbm-util%{?_isa}
 Requires: ea-apr-util%{?_isa}
 
 %if 0%{?rhel} >= 8
+%if 0%{?rhel} < 10
 BuildRequires: ea-brotli
+%else
+BuildRequires: brotli
+%endif
 BuildRequires: libcurl >= %{libcurl_ver}
 BuildRequires: libcurl-devel >= %{libcurl_ver}
 Requires: ea-brotli
@@ -121,32 +138,39 @@ This package contains the ModSecurity Audit Log Collector.
     -e "s|@HTTPD_CONFDIR@|%{_httpd_confdir}|" \
     %{SOURCE4} > %{SOURCE4}.new
 
-find . -type f -exec touch -r ./configure \{\} \;
-
 %build
 # Force dependency resolution to pick /usr/bin/perl instead of /bin/perl
 # This helps downstream users of our RPMS (see: EA-7468) and (EA-9583)
 export PATH="/usr/bin:$PATH"
 
+
+%if 0%{?rhel} >= 10
+export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
+export LDFLAGS="-Wl,-rpath,/opt/cpanel/ea-openssl11/%{_lib} -Wl,-rpath,/opt/cpanel/ea-libxml2/%{_lib} -L/opt/cpanel/ea-libxml2/%{_lib} -lxml2 -lz -llzma -lm -ldl -Wl,-z,relro,-z,now"
+%else
 export LDFLAGS="-Wl,-rpath=/opt/cpanel/ea-brotli/lib -Wl,-rpath,/opt/cpanel/ea-openssl11/%{_lib} -Wl,-rpath,/opt/cpanel/ea-libxml2/%{_lib} -L/opt/cpanel/ea-libxml2/%{_lib} -lxml2 -lz -llzma -lm -ldl -Wl,-z,relro,-z,now"
+%endif
 
 ./autogen.sh
+find . -type f -exec touch -r ./configure \{\} \;
 
-%if 0%{?rhel} >= 8
-./configure --enable-pcre-match-limit=1000000 \
-           --enable-pcre-match-limit-recursion=1000000 \
-           --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} \
-           --with-apxs=%{_httpd_apxs} \
-           --with-curl=/usr/bin/curl-config \
-           --with-libxml=/opt/cpanel/ea-libxml2
-%else
-./configure --enable-pcre-match-limit=1000000 \
-           --enable-pcre-match-limit-recursion=1000000 \
-           --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} \
-           --with-apxs=%{_httpd_apxs} \
-           --with-curl=/opt/cpanel/libcurl \
-           --with-libxml=/opt/cpanel/ea-libxml2
+# Define base configure options
+%global configure_opts --enable-pcre-match-limit=1000000 --enable-pcre-match-limit-recursion=1000000 --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2
+
+# Dynamically adjust configure options based on OS version
+%if 0%{?rhel} >= 10
+%global configure_opts %{configure_opts} --with-pcre2=/usr/bin/pcre2-config
 %endif
+
+# Dynamically adjust curl path based on OS version
+%if 0%{?rhel} >= 8
+%global curl_config /usr/bin/curl-config
+%else
+%global curl_config /opt/cpanel/libcurl
+%endif
+
+# Now just one simple configure command:
+./configure %{configure_opts} --with-curl=%{curl_config}
 
 %{__make} %{_smp_mflags}
 
