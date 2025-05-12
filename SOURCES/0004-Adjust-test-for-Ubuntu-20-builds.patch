@@ -1,0 +1,61 @@
+From 6e1370dc0d5558906da7e4f1f413315ec88e7072 Mon Sep 17 00:00:00 2001
+From: Cory McIntire <cory.mcintire@webpros.com>
+Date: Fri, 9 May 2025 09:20:17 -0500
+Subject: [PATCH 4/4] Adjust test for Ubuntu 20 builds
+
+---
+ tests/Makefile.am    |  5 +++--
+ tests/logging_stub.c | 13 +++++++++++++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+ create mode 100644 tests/logging_stub.c
+
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 8ffc3bb..77cfc8b 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -1,5 +1,6 @@
+ check_PROGRAMS = msc_test
+ msc_test_SOURCES = msc_test.c \
++    logging_stub.c \
+     ../apache2/acmp.c \
+     ../apache2/libinjection/libinjection_html5.c \
+     ../apache2/libinjection/libinjection_sqli.c \
+@@ -42,14 +43,14 @@ msc_test_CFLAGS = @APR_CFLAGS@ \
+     @PCRE_CFLAGS@ \
+     @YAJL_CFLAGS@ \
+     @SSDEEP_CFLAGS@
+-    
++
+ msc_test_CPPFLAGS = -I$(top_srcdir)/apache2 \
+     @APR_CPPFLAGS@ \
+     @CURL_CPPFLAGS@ \
+     @LIBXML2_CFLAGS@ \
+     @LIBXML2_CPPFLAGS@ \
+     @PCRE_CPPFLAGS@
+-    
++
+ msc_test_LDADD = @APR_LDADD@ \
+     @APU_LDADD@ \
+     @CURL_LDADD@ \
+diff --git a/tests/logging_stub.c b/tests/logging_stub.c
+new file mode 100644
+index 0000000..c255cb7
+--- /dev/null
++++ b/tests/logging_stub.c
+@@ -0,0 +1,13 @@
++#include "msc_util.h"
++
++/*
++ * Stub implementation of id_log() for the test harness.
++ * Simply returns the rule's id string if present, or a placeholder.
++ */
++
++const char* id_log(msre_rule* rule) {
++    if (rule && rule->actionset && rule->actionset->id) {
++        return rule->actionset->id;
++    }
++    return "(unknown)";
++}
+-- 
+2.48.1
+
