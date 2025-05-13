@@ -1,0 +1,30 @@
+From 3170f7a1ac444a7638ac7edf958cb605523f5b6b Mon Sep 17 00:00:00 2001
+From: Cory McIntire <cory.mcintire@webpros.com>
+Date: Mon, 5 May 2025 14:26:13 -0500
+Subject: [PATCH 3/4] patch re.c for Ubuntu builds
+
+---
+ apache2/re.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/apache2/re.c b/apache2/re.c
+index 82eba8f..bd3714c 100644
+--- a/apache2/re.c
++++ b/apache2/re.c
+@@ -472,8 +472,11 @@ char *update_rule_target_ex(modsec_rec *msr, msre_ruleset *ruleset, msre_rule *r
+ 
+ end:
+     if (my_error_msg) {
+-        if (msr) msr_log(msr, 9, my_error_msg);
+-        else ap_log_error(APLOG_MARK, APLOG_INFO, 0, NULL, my_error_msg);
++
++    if (msr)
++        msr_log(msr, 9, "%s", my_error_msg);
++    else
++        ap_log_error(APLOG_MARK, APLOG_INFO, 0, NULL, "%s", my_error_msg);
+     }
+     if (target_list != NULL) free(target_list);
+     if (replace != NULL) free(replace);
+-- 
+2.48.1
+
