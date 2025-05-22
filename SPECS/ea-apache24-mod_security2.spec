@@ -61,7 +61,7 @@ Provides: mod_security
 # WHM only factors in real package names so:
 Conflicts: ea-modsec30 ea-modsec31
 
-BuildRequires: pcre2 pcre2-devel
+BuildRequires: pcre2-devel
 
 BuildRequires: ea-apache24-devel ea-libxml2-devel lua-devel
 BuildRequires: ea-apr-devel ea-apr-util-devel
