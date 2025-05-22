@@ -37,7 +37,7 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
-Version: 2.9.8
+Version: 2.9.9
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
 %define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
@@ -251,6 +251,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Thu May 22 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.9-1
+- EA-12885: Update ea-apache24-mod_security2 from v2.9.8 to v2.9.9
+
 * Wed Feb 05 2025 Cory McIntire <cory.mcintire@webpros.com> - 2.9.8-1
 - EA-12853: Update ea-apache24-mod_security2 from v2.9.7 to v2.9.8
 - Remove 2 patches that were added upstream.
