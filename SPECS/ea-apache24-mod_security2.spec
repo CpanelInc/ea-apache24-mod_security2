@@ -61,11 +61,7 @@ Provides: mod_security
 # WHM only factors in real package names so:
 Conflicts: ea-modsec30 ea-modsec31
 
-%if 0%{?rhel} >= 10
-BuildRequires: pcre2-devel
-%else
-BuildRequires: pcre-devel
-%endif
+BuildRequires: pcre2 pcre2-devel
 
 BuildRequires: ea-apache24-devel ea-libxml2-devel lua-devel
 BuildRequires: ea-apr-devel ea-apr-util-devel
@@ -155,11 +151,11 @@ export LDFLAGS="-Wl,-rpath=/opt/cpanel/ea-brotli/lib -Wl,-rpath,/opt/cpanel/ea-o
 find . -type f -exec touch -r ./configure \{\} \;
 
 # Define base configure options
-%global configure_opts --enable-pcre-match-limit=1000000 --enable-pcre-match-limit-recursion=1000000 --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2
+%global configure_opts --enable-pcre-match-limit=1000000 --enable-pcre-match-limit-recursion=1000000 --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2 --with-pcre2=/usr/bin/pcre2-config
 
-# Dynamically adjust configure options based on OS version
-%if 0%{?rhel} >= 10
-%global configure_opts %{configure_opts} --with-pcre2=/usr/bin/pcre2-config
+# For c6 and c7 they need -std=gnu99 for pcre2 (2.9.9 only supports pcre2 it seems)
+%if 0%{?rhel} < 8
+export CFLAGS="-std=gnu99"
 %endif
 
 # Dynamically adjust curl path based on OS version
