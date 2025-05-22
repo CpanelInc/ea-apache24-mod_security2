@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Dan Muey <daniel.muey@webpros.com>
 Date: Thu, 22 May 2025 14:59:41 +0000
-Subject: [PATCH] PCRE config RPATH adjustment
+Subject: [PATCH 1/4] PCRE config RPATH adjustment
 
 Case EA-6376: mod_security2.so has faulty RPATH
 Updated find_pcre.m4 to handle libpcre.so installed in system

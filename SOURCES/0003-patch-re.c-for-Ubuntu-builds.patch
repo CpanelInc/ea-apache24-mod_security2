@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Dan Muey <daniel.muey@webpros.com>
 Date: Thu, 22 May 2025 15:10:22 +0000
-Subject: [PATCH] patch re.c for Ubuntu builds
+Subject: [PATCH 3/4] patch re.c for Ubuntu builds
 
 ---
  apache2/re.c | 5 +++++
