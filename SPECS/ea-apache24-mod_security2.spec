@@ -96,7 +96,8 @@ Requires: ea-libcurl >= %{ea_libcurl_ver}
 
 Patch0: 0001-PCRE-config-RPATH-adjustment.patch
 Patch1: 0002-Fix-httpd.conf.in-template-so-that-tests-run-regress.patch
-Patch2: 0003-Adjust-test-for-Ubuntu-20-builds.patch
+Patch2: 0003-patch-re.c-for-Ubuntu-builds.patch
+Patch3: 0004-Adjust-test-for-Ubuntu-20-builds.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-build-%(%{__id_u} -n)
 
@@ -119,7 +120,8 @@ This package contains the ModSecurity Audit Log Collector.
 %setup -q -n %{upstream_name}-%{version}
 %patch0 -p1 -b .pcrerpath
 %patch1 -p1 -b .runregressiontests
-%patch2 -p1 -b .testfixubuntu20
+%patch2 -p1 -b .recpatch
+%patch3 -p1 -b .testfixubuntu20
 
 # install modsec config (cPanel & WHM expects this name.. don't change it)
 %{__sed} -e "s|@HTTPD_LOGDIR@|%{_httpd_logdir}|" \
