@@ -151,7 +151,7 @@ export LDFLAGS="-Wl,-rpath=/opt/cpanel/ea-brotli/lib -Wl,-rpath,/opt/cpanel/ea-o
 find . -type f -exec touch -r ./configure \{\} \;
 
 # Define base configure options
-%global configure_opts --enable-pcre-match-limit=1000000 --enable-pcre-match-limit-recursion=1000000 --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2 --with-pcre2=/usr/bin/pcre2-config
+%global configure_opts --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2 --with-pcre2=/usr/bin/pcre2-config
 
 # For c6 and c7 they need -std=gnu99 for pcre2 (2.9.9 only supports pcre2 it seems)
 %if 0%{?rhel} < 8
