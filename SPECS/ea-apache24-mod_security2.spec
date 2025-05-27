@@ -76,6 +76,10 @@ Requires: ea-apache24-mod_unique_id%{?_isa}
 Requires: ea-modsec-sdbm-util%{?_isa}
 Requires: ea-apr-util%{?_isa}
 
+%if 0%{?rhel} == 7
+Requires: pcre2
+%endif
+
 %if 0%{?rhel} >= 8
 %if 0%{?rhel} < 10
 BuildRequires: ea-brotli
