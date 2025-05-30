@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Brian Mendoza <brian.mendoza@webpros.com>
+Date: Fri, 30 May 2025 12:00:00 +0000
+Subject: [PATCH 3/3] Replace pcre2_set_depth_limit with pcre2_set_recursion_limit for CentOS 7 compatibility
+
+---
+ apache2/msc_pcre.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/apache2/msc_pcre.c b/apache2/msc_pcre.c
+index abcdef1..1234567 100644
+--- a/apache2/msc_pcre.c
++++ b/apache2/msc_pcre.c
+@@ -119,12 +119,12 @@
+         uint32_t final_match_limit_recursion = 0;
+         if (match_limit_recursion > 0) {
+             final_match_limit_recursion = match_limit_recursion;
+-            pcre2_set_depth_limit(match_context, final_match_limit_recursion);
++            pcre2_set_recursion_limit(match_context, final_match_limit_recursion);
+         }
+ #ifdef MODSEC_PCRE_MATCH_LIMIT_RECURSION
+         else {
+             final_match_limit_recursion = MODSEC_PCRE_MATCH_LIMIT_RECURSION;
+-            pcre2_set_depth_limit(match_context, final_match_limit_recursion);
++            pcre2_set_recursion_limit(match_context, final_match_limit_recursion);
+         }
+ #endif /* MODSEC_PCRE_MATCH_LIMIT_RECURSION */
+     }
+
