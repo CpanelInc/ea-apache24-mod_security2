@@ -37,7 +37,7 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
-Version: 2.9.8
+Version: 2.9.9
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
 %define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
@@ -61,11 +61,7 @@ Provides: mod_security
 # WHM only factors in real package names so:
 Conflicts: ea-modsec30 ea-modsec31
 
-%if 0%{?rhel} >= 10
 BuildRequires: pcre2-devel
-%else
-BuildRequires: pcre-devel
-%endif
 
 BuildRequires: ea-apache24-devel ea-libxml2-devel lua-devel
 BuildRequires: ea-apr-devel ea-apr-util-devel
@@ -79,6 +75,10 @@ Requires: ea-apache24-config, ea-apache24%{?_isa}, ea-apache24-mmn = %{_httpd_mm
 Requires: ea-apache24-mod_unique_id%{?_isa}
 Requires: ea-modsec-sdbm-util%{?_isa}
 Requires: ea-apr-util%{?_isa}
+
+%if 0%{?rhel} == 7
+Requires: pcre2
+%endif
 
 %if 0%{?rhel} >= 8
 %if 0%{?rhel} < 10
@@ -100,8 +100,7 @@ Requires: ea-libcurl >= %{ea_libcurl_ver}
 
 Patch0: 0001-PCRE-config-RPATH-adjustment.patch
 Patch1: 0002-Fix-httpd.conf.in-template-so-that-tests-run-regress.patch
-Patch2: 0003-patch-re.c-for-Ubuntu-builds.patch
-Patch3: 0004-Adjust-test-for-Ubuntu-20-builds.patch
+Patch2: 0003-Replace-pcre2_set_depth_limit.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-build-%(%{__id_u} -n)
 
@@ -124,8 +123,9 @@ This package contains the ModSecurity Audit Log Collector.
 %setup -q -n %{upstream_name}-%{version}
 %patch0 -p1 -b .pcrerpath
 %patch1 -p1 -b .runregressiontests
-%patch2 -p1 -b .recpatch
-%patch3 -p1 -b .testfixubuntu20
+%if 0%{?rhel} <= 7
+%patch2 -p1 -b .replace_depth_limit
+%endif
 
 # install modsec config (cPanel & WHM expects this name.. don't change it)
 %{__sed} -e "s|@HTTPD_LOGDIR@|%{_httpd_logdir}|" \
@@ -155,11 +155,11 @@ export LDFLAGS="-Wl,-rpath=/opt/cpanel/ea-brotli/lib -Wl,-rpath,/opt/cpanel/ea-o
 find . -type f -exec touch -r ./configure \{\} \;
 
 # Define base configure options
-%global configure_opts --enable-pcre-match-limit=1000000 --enable-pcre-match-limit-recursion=1000000 --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2
+%global configure_opts --with-apr=%{ea_apr_dir} --with-apu=%{ea_apu_dir} --with-apxs=%{_httpd_apxs} --with-libxml=/opt/cpanel/ea-libxml2 --with-pcre2=/usr/bin/pcre2-config
 
-# Dynamically adjust configure options based on OS version
-%if 0%{?rhel} >= 10
-%global configure_opts %{configure_opts} --with-pcre2=/usr/bin/pcre2-config
+# For c6 and c7 they need -std=gnu99 for pcre2 (2.9.9 only supports pcre2 it seems)
+%if 0%{?rhel} < 8
+export CFLAGS="-std=gnu99"
 %endif
 
 # Dynamically adjust curl path based on OS version
@@ -251,6 +251,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Thu May 22 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.9-1
+- EA-12885: Update ea-apache24-mod_security2 from v2.9.8 to v2.9.9
+
 * Wed Feb 05 2025 Cory McIntire <cory.mcintire@webpros.com> - 2.9.8-1
 - EA-12853: Update ea-apache24-mod_security2 from v2.9.7 to v2.9.8
 - Remove 2 patches that were added upstream.

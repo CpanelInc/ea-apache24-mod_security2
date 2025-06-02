@@ -1,7 +1,7 @@
-From 7db9d36c70105c0dbe9ea8c1ba2752c2af4b2bce Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gary Stanley <gary@cpanel.net>
 Date: Sat, 23 Oct 2021 17:43:10 +0000
-Subject: [PATCH 2/4] Fix httpd.conf.in template so that
+Subject: [PATCH 2/3] Fix httpd.conf.in template so that
  tests/run-regression-tests.pl functions with EA out-of-box.
 
 ---
@@ -49,6 +49,3 @@ index 840d5f3..fc58190 100644
  
  ServerName localhost
  CoreDumpDirectory @MSC_REGRESSION_SERVERROOT_DIR@/tmp
--- 
-2.48.1
-
