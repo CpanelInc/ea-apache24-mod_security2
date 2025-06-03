@@ -30,7 +30,7 @@ echo "CONFIGURE :$ea_apr_dir: :$ea_apu_dir:"
 ls -ld /usr/bin/apxs
 
 ./configure  \
-    --enable-pcre-match-limit-recursion=1000000 \
+    --with-pcre=/usr/bin/pcre-config \
     --with-apr=$ea_apr_dir \
     --with-apu=$ea_apu_dir \
     --with-apxs=$_httpd_apxs \

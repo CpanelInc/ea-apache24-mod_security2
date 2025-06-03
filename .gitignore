@@ -1,3 +1,8 @@
-OBS
-.osc
-OBS.*
+# Ignoring OBS related files makes it hard to see the actual state of things. So please …
+#
+# Do not ignore debify related files:
+#    1. they are cleaned up when debify is run (i.e. `et obs` won’t leave cruft)
+#    2. we want to be able to see what was generated w/ `git diff`
+# Do not ignore OBS cruft:
+#    1. it will silently use up disk space for no reason
+#    2. if you really want that behavior please add it to your personal global git config so its not imposed on those who don’t want it
