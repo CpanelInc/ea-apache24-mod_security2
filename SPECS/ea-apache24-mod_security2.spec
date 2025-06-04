@@ -253,9 +253,11 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %changelog
 * Mon Jun 02 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.10-1
 - ZC-12886: Update ea-apache24-mod_security2 from v2.9.9 to v2.9.10
+- DoS vulnerability: CVE-2025-48866
 
 * Thu May 22 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.9-1
 - EA-12885: Update ea-apache24-mod_security2 from v2.9.8 to v2.9.9
+- Possible DoS vulnerability: CVE-2025-47947
 
 * Wed Feb 05 2025 Cory McIntire <cory.mcintire@webpros.com> - 2.9.8-1
 - EA-12853: Update ea-apache24-mod_security2 from v2.9.7 to v2.9.8
