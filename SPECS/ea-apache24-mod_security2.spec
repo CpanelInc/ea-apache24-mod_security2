@@ -253,6 +253,7 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %changelog
 * Tue Jul 01 2025 Cory McIntire <cory.mcintire@webpros.com> - 2.9.11-1
 - EA-12994: Update ea-apache24-mod_security2 from v2.9.10 to v2.9.11
+- prevent segmentation fault if the XML node is empty: CVE-2025-52891
 
 * Mon Jun 02 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.10-1
 - ZC-12886: Update ea-apache24-mod_security2 from v2.9.9 to v2.9.10
