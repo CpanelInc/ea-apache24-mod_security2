@@ -62,6 +62,7 @@ Provides: mod_security
 Conflicts: ea-modsec30 ea-modsec31
 
 BuildRequires: pcre2-devel
+BuildRequires: autotools-latest-autoconf libtool
 
 BuildRequires: ea-apache24-devel ea-libxml2-devel lua-devel
 BuildRequires: ea-apr-devel ea-apr-util-devel
