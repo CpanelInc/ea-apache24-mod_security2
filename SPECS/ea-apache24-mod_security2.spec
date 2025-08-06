@@ -67,9 +67,11 @@ BuildRequires: autotools-latest-autoconf libtool
 BuildRequires: ea-apache24-devel ea-libxml2-devel lua-devel
 BuildRequires: ea-apr-devel ea-apr-util-devel
 BuildRequires: lua-devel >= 5.1, ea-libxml2-devel
+%if 0%{?rhel} < 10
 %if 0%{?rhel} >= 7
 BuildRequires: yajl yajl-devel
 Requires: yajl
+%endif
 %endif
 Requires: lua%{?_isa} >= 5.1, ea-libxml2%{?_isa}
 Requires: ea-apache24-config, ea-apache24%{?_isa}, ea-apache24-mmn = %{_httpd_mmn}
@@ -89,7 +91,11 @@ BuildRequires: brotli
 %endif
 BuildRequires: libcurl >= %{libcurl_ver}
 BuildRequires: libcurl-devel >= %{libcurl_ver}
+%if 0%{?rhel} < 10
 Requires: ea-brotli
+%else
+Requires: brotli
+%endif
 Requires: libcurl >= %{libcurl_ver}
 %else
 BuildRequires: ea-libcurl >= %{ea_libcurl_ver}
