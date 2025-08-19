@@ -260,6 +260,7 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %changelog
 * Wed Aug 06 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.12-1
 - EA-13061: Update ea-apache24-mod_security2 from v2.9.11 to v2.9.12
+- fix: Improper error handling CVE 2025-54571
 
 * Tue Jul 01 2025 Cory McIntire <cory.mcintire@webpros.com> - 2.9.11-1
 - EA-12994: Update ea-apache24-mod_security2 from v2.9.10 to v2.9.11
