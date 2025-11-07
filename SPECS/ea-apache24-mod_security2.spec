@@ -39,7 +39,7 @@ Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
 Version: 2.9.12
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
-%define release_prefix 1
+%define release_prefix 2
 Release: %{release_prefix}%{?dist}.cpanel
 License: ASL 2.0
 URL: http://www.modsecurity.org/
@@ -158,6 +158,11 @@ export LDFLAGS="-Wl,-rpath,/opt/cpanel/ea-openssl11/%{_lib} -Wl,-rpath,/opt/cpan
 export LDFLAGS="-Wl,-rpath=/opt/cpanel/ea-brotli/lib -Wl,-rpath,/opt/cpanel/ea-openssl11/%{_lib} -Wl,-rpath,/opt/cpanel/ea-libxml2/%{_lib} -L/opt/cpanel/ea-libxml2/%{_lib} -lxml2 -lz -llzma -lm -ldl -Wl,-z,relro,-z,now"
 %endif
 
+export LDFLAGS="$LDFLAGS \
+  -Wl,--enable-new-dtags \
+  -Wl,-rpath,/opt/cpanel/ea-libxml2/lib64 \
+  -Wl,-rpath,/opt/cpanel/ea-libxml2/lib"
+
 ./autogen.sh
 find . -type f -exec touch -r ./configure \{\} \;
 
@@ -258,6 +263,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Mon Nov 03 2025 Chris Castillo <chris.castillo@webpros.com> - 2.9.12-2
+- EA4-136: Fix libxml2 library linking issues
+
 * Wed Aug 06 2025 Dan Muey <daniel.muey@webpros.com> - 2.9.12-1
 - EA-13061: Update ea-apache24-mod_security2 from v2.9.11 to v2.9.12
 - fix: Improper error handling CVE 2025-54571
