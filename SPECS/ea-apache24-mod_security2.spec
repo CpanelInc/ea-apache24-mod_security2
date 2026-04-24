@@ -39,7 +39,7 @@ Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
 Version: 2.9.12
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
-%define release_prefix 2
+%define release_prefix 3
 Release: %{release_prefix}%{?dist}.cpanel
 License: ASL 2.0
 URL: http://www.modsecurity.org/
@@ -263,6 +263,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Fri Apr 24 2026 Heekyoung Park <heekyoung.park@webpros.com> - 2.9.12-3
+- EA4-260: Build for Ubuntu 26.04
+
 * Mon Nov 03 2025 Chris Castillo <chris.castillo@webpros.com> - 2.9.12-2
 - EA4-136: Fix libxml2 library linking issues
 
