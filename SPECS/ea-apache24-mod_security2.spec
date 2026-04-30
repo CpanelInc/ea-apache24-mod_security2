@@ -1,6 +1,6 @@
 # Defining the package namespace
 %global ns_name ea-apache24
-%global upstream_name ModSecurity
+%global upstream_name modsecurity-v
 %global module_name mod_security2
 
 # Ugly hack. Harcoded values to avoid relocation.
@@ -45,7 +45,7 @@ License: ASL 2.0
 URL: http://www.modsecurity.org/
 Vendor: cPanel, Inc.
 Group: System Environment/Daemons
-Source: v%{version}.tar.gz
+Source: modsecurity-v%{version}.tar.gz
 Source1: modsec2.conf
 Source2: loadmod.conf
 Source3: modsec2.user.conf
@@ -127,7 +127,7 @@ This package contains the ModSecurity Audit Log Collector.
 
 
 %prep
-%setup -q -n %{upstream_name}-%{version}
+%setup -q -n %{upstream_name}%{version}
 %patch0 -p1 -b .pcrerpath
 %patch1 -p1 -b .runregressiontests
 %if 0%{?rhel} <= 7
