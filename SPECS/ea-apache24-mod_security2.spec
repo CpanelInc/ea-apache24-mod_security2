@@ -1,6 +1,6 @@
 # Defining the package namespace
 %global ns_name ea-apache24
-%global upstream_name ModSecurity
+%global upstream_name modsecurity-v
 %global module_name mod_security2
 
 # Ugly hack. Harcoded values to avoid relocation.
@@ -37,15 +37,15 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
-Version: 2.9.12
+Version: 2.9.13
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
-%define release_prefix 2
+%define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
 License: ASL 2.0
 URL: http://www.modsecurity.org/
 Vendor: cPanel, Inc.
 Group: System Environment/Daemons
-Source: v%{version}.tar.gz
+Source: modsecurity-v%{version}.tar.gz
 Source1: modsec2.conf
 Source2: loadmod.conf
 Source3: modsec2.user.conf
@@ -127,7 +127,7 @@ This package contains the ModSecurity Audit Log Collector.
 
 
 %prep
-%setup -q -n %{upstream_name}-%{version}
+%setup -q -n %{upstream_name}%{version}
 %patch0 -p1 -b .pcrerpath
 %patch1 -p1 -b .runregressiontests
 %if 0%{?rhel} <= 7
@@ -263,6 +263,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Wed Apr 29 2026 EA4 Update Bot <cory.mcintire@webpros.com> - 2.9.13-1
+- EA-13418: Update ea-apache24-mod_security2 from v2.9.12 to v2.9.13
+
 * Mon Nov 03 2025 Chris Castillo <chris.castillo@webpros.com> - 2.9.12-2
 - EA4-136: Fix libxml2 library linking issues
 
