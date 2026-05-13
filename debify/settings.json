@@ -37,5 +37,6 @@
     "remove_from_requires": [
         "autotools-latest-autoconf",
         "yajl-devel"
-    ]
+    ],
+    "source_tarball_regex": "modsecurity-v"
 }
