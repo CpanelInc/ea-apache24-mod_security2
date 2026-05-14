@@ -263,7 +263,7 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
-* Fri Apr 24 2026 Heekyoung Park <heekyoung.park@webpros.com> - 2.9.13-2
+* Fri Apr 29 2026 Heekyoung Park <heekyoung.park@webpros.com> - 2.9.13-2
 - EA4-260: Build for Ubuntu 26.04
 
 * Wed Apr 29 2026 EA4 Update Bot <cory.mcintire@webpros.com> - 2.9.13-1
