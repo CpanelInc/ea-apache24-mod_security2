@@ -21,8 +21,8 @@
     "add_to_build_requires": [
         "ea-apr",
         "ea-apr-util",
-        "libpcre3-dev",
-        "libxml2",
+        ["libpcre3-dev", "libpcre2-dev"],
+        ["libxml2-16", "libxml2t64", "libxml2"],
         "libyajl2",
         "libyajl-dev"
     ],
