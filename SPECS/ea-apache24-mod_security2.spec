@@ -37,9 +37,9 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: %{ns_name}-%{module_name}
-Version: 2.9.13
+Version: 2.9.14
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4560 for more details
-%define release_prefix 2
+%define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
 License: ASL 2.0
 URL: http://www.modsecurity.org/
@@ -263,6 +263,9 @@ echo -n %{version} > $RPM_BUILD_ROOT/etc/cpanel/ea4/modsecurity.version
 %attr(0755,root,root) %{_bindir}/mlogc-batch-load
 
 %changelog
+* Fri Jul 03 2026 EA4 Update Bot <cory.mcintire@webpros.com> - 2.9.14-1
+- EA-13480: Update ea-apache24-mod_security2 from v2.9.13 to v2.9.14
+
 * Fri Apr 29 2026 Heekyoung Park <heekyoung.park@webpros.com> - 2.9.13-2
 - EA4-260: Build for Ubuntu 26.04
 
