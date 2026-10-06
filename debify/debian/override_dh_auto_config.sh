@@ -39,14 +39,8 @@ ls -ld /usr/bin/apxs
 # the --with-apu= argument, bypassing PATH entirely.  The wrapper must live at
 # ${fake_apu_dir}/bin/apu-1-config and --with-apu must point to ${fake_apu_dir}.
 _apu_dir=$ea_apu_dir
-# On Ubuntu 26.04+ libpcre3-dev (which provides pcre-config) is dropped.
-# find_pcre2.m4 skips pcre2 detection entirely when --with-pcre is set to any
-# non-"no" value, even if pcre-config doesn't exist.  So pass --with-pcre=no on
-# U26+ to let CHECK_PCRE2() run and set PCRE2_LDADD=-lpcre2-8.
-_pcre_flag="--with-pcre=/usr/bin/pcre-config"
 UBUNTU_VERSION=$(. /etc/os-release 2>/dev/null && echo "${VERSION_ID:-0}" | tr -d '.')
 if [[ "${UBUNTU_VERSION:-0}" -ge 2604 ]]; then
-    _pcre_flag="--with-pcre=no"
     # libaprutil-1.so references crypt() which moved to libxcrypt on Ubuntu 26.04.
     # libxcrypt-dev (unversioned libcrypt.so symlink) is not in the OBS mirror.
     # Find the actual versioned .so from the installed libcrypt1 runtime package
@@ -78,7 +72,7 @@ WRAPPER
 fi
 
 ./configure  \
-    ${_pcre_flag} \
+    --with-pcre2=/usr/bin/pcre2-config \
     --with-apr=$ea_apr_dir \
     --with-apu=${_apu_dir} \
     --with-apxs=$_httpd_apxs \
